@@ -5,54 +5,90 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor
 import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
-import net.minecraft.entity.LivingEntity
+import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.render.DeltaTracker
 import net.minecraft.util.Identifier
+import net.minecraft.world.GameMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 object TemplateClient {
     const val MODID = "template"
+//    var cfg = ConfigApi.registerAndLoadConfig(::MyConfig, RegisterType.CLIENT)
+
+
+    const val ENABLED = true
+
+    const val X_OFFSET = -8
+
+    const val TWO_BARS = true
+    const val TWO_BARS_OFFSET = 6
 
     @JvmField
     val log: Logger = LoggerFactory.getLogger(TemplateClient::class.simpleName)
 
-    val COOLDOWN_INDICATOR_FULL: Identifier = Identifier.ofDefault("hud/crosshair_attack_indicator_full")
-    val COOLDOWN_INDICATOR_BACKGROUND: Identifier = Identifier.ofDefault("hud/crosshair_attack_indicator_background")
-    val COOLDOWN_INDICATOR_PROGRESS: Identifier = Identifier.ofDefault("hud/crosshair_attack_indicator_progress")
 
     fun init() {
         log.info("Hello from Client")
 
-        HudRenderCallback.EVENT.register hud@{ graphics, deltaTracker ->
-            val client = MinecraftClient.getInstance()
-            val player = client.player ?: return@hud
-
-            val selectedItem = player.mainHandStack ?: return@hud
-            if (selectedItem.isEmpty) return@hud
-
-            RenderSystem.enableBlend()
-            RenderSystem.blendFuncSeparate(
-                SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO
-            )
-            val f: Float = player.getAttackCooldownProgress(0.0f)
-            var bl = false
-            if (client.targetedEntity != null && client.targetedEntity is LivingEntity && (f >= 1.0f)) {
-                bl = (player.attackCooldownProgressPerTick > 5.0f) and player.isAlive
-            }
-
-            val j = graphics.scaledWindowHeight / 2 + 7 - 16
-            val k = graphics.scaledWindowWidth / 2 + 8
-            if (bl) {
-                graphics.drawGuiTexture(COOLDOWN_INDICATOR_FULL, k, j, 16, 16)
-            } else if (f < 1.0f) {
-                val l = (f * 17.0f).toInt()
-                graphics.drawGuiTexture(COOLDOWN_INDICATOR_BACKGROUND, k, j, 16, 4)
-                graphics.drawGuiTexture(COOLDOWN_INDICATOR_PROGRESS, 16, 4, 0, 0, k, j, l, 4)
-            }
-            RenderSystem.disableBlend()
-        }
+        if (ENABLED) HudRenderCallback.EVENT.register(::renderCooldown)
     }
 
-    fun id(path: String) = Identifier.of(MODID, path)
+    fun id(path: String): Identifier = Identifier.of(MODID, path)
+
+}
+
+@Suppress("FunctionName")
+private fun RenderSystem_cursorBlend() = RenderSystem.blendFuncSeparate(
+    SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO
+)
+
+private val COOLDOWN_INDICATOR_BACKGROUND: Identifier =
+    Identifier.ofDefault("hud/crosshair_attack_indicator_background")
+private val COOLDOWN_INDICATOR_PROGRESS: Identifier = Identifier.ofDefault("hud/crosshair_attack_indicator_progress")
+
+
+private fun renderCooldown(graphics: GuiGraphics, deltaTracker: DeltaTracker) {
+    if (!TemplateClient.ENABLED) return
+    val client = MinecraftClient.getInstance()
+    val player = client.player ?: return
+
+    if (!client.options.perspective.isFirstPerson || client.interactionManager?.currentGameMode == GameMode.SPECTATOR) return
+
+    val selectedItem = if (player.mainHandStack.isEmpty) player.offHandStack else player.mainHandStack
+    if (selectedItem.isEmpty) return
+
+    RenderSystem.enableBlend()
+    RenderSystem_cursorBlend()
+    val mainCooldown = player.itemCooldownManager.getCooldownProgress(player.mainHandStack.item, 0f)
+    val offHandCooldown = player.itemCooldownManager.getCooldownProgress(player.offHandStack.item, 0f)
+    if (TemplateClient.TWO_BARS) {
+        if (mainCooldown > 0f) {
+            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
+            val y = graphics.scaledWindowHeight / 2 - 16
+            graphics.drawBar(x, y, mainCooldown)
+        }
+        if (offHandCooldown > 0f) {
+            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
+            val y = graphics.scaledWindowHeight / 2 - 16 - if (mainCooldown > 0f) TemplateClient.TWO_BARS_OFFSET else 0
+            graphics.drawBar(x, y, offHandCooldown)
+        }
+    } else {
+        val cooldown = if (mainCooldown > 0f) mainCooldown else offHandCooldown
+        if (cooldown > 0f) {
+            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
+            val y = graphics.scaledWindowHeight / 2 - 16
+            graphics.drawBar(x, y, cooldown)
+        }
+    }
+    RenderSystem.defaultBlendFunc()
+    RenderSystem.disableBlend()
+}
+
+fun GuiGraphics.drawBar(x: Int, y: Int, cooldown: Float) {
+    val slice = (cooldown * 17.0f).toInt()
+    this.drawGuiTexture(COOLDOWN_INDICATOR_BACKGROUND, x, y, 16, 4)
+    this.drawGuiTexture(COOLDOWN_INDICATOR_PROGRESS, 16, 4, 0, 0, x, y, slice, 4)
+
 }
