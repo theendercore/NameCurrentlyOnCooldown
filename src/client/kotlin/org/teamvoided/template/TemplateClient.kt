@@ -3,6 +3,8 @@ package org.teamvoided.template
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor
 import com.mojang.blaze3d.systems.RenderSystem
+import me.fzzyhmstrs.fzzy_config.api.ConfigApi
+import me.fzzyhmstrs.fzzy_config.api.RegisterType
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.GuiGraphics
@@ -11,32 +13,21 @@ import net.minecraft.util.Identifier
 import net.minecraft.world.GameMode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.teamvoided.template.TemplateClient.CONFIG
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 object TemplateClient {
     const val MODID = "template"
-//    var cfg = ConfigApi.registerAndLoadConfig(::MyConfig, RegisterType.CLIENT)
-
-
-    const val ENABLED = true
-
-    const val X_OFFSET = -8
-
-    const val TWO_BARS = true
-    const val TWO_BARS_OFFSET = 6
+    var CONFIG = ConfigApi.registerAndLoadConfig(::CooldownConfig, RegisterType.CLIENT)
 
     @JvmField
     val log: Logger = LoggerFactory.getLogger(TemplateClient::class.simpleName)
-
-
     fun init() {
         log.info("Hello from Client")
-
-        if (ENABLED) HudRenderCallback.EVENT.register(::renderCooldown)
+        if (CONFIG.enabled) HudRenderCallback.EVENT.register(::renderCooldown)
     }
 
     fun id(path: String): Identifier = Identifier.of(MODID, path)
-
 }
 
 @Suppress("FunctionName")
@@ -48,9 +39,8 @@ private val COOLDOWN_INDICATOR_BACKGROUND: Identifier =
     Identifier.ofDefault("hud/crosshair_attack_indicator_background")
 private val COOLDOWN_INDICATOR_PROGRESS: Identifier = Identifier.ofDefault("hud/crosshair_attack_indicator_progress")
 
-
 private fun renderCooldown(graphics: GuiGraphics, deltaTracker: DeltaTracker) {
-    if (!TemplateClient.ENABLED) return
+    if (!CONFIG.enabled) return
     val client = MinecraftClient.getInstance()
     val player = client.player ?: return
 
@@ -63,32 +53,45 @@ private fun renderCooldown(graphics: GuiGraphics, deltaTracker: DeltaTracker) {
     RenderSystem_cursorBlend()
     val mainCooldown = player.itemCooldownManager.getCooldownProgress(player.mainHandStack.item, 0f)
     val offHandCooldown = player.itemCooldownManager.getCooldownProgress(player.offHandStack.item, 0f)
-    if (TemplateClient.TWO_BARS) {
-        if (mainCooldown > 0f) {
-            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
-            val y = graphics.scaledWindowHeight / 2 - 16
-            graphics.drawBar(x, y, mainCooldown)
+    when (CONFIG.barMode) {
+        BarMode.SINGLE -> {
+            val cooldown = if (mainCooldown > 0f) mainCooldown else offHandCooldown
+            if (cooldown > 0f) graphics.drawMainBar(cooldown)
         }
-        if (offHandCooldown > 0f) {
-            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
-            val y = graphics.scaledWindowHeight / 2 - 16 - if (mainCooldown > 0f) TemplateClient.TWO_BARS_OFFSET else 0
-            graphics.drawBar(x, y, offHandCooldown)
+
+        BarMode.DOUBLE_LINKED -> {
+            if (mainCooldown > 0f) graphics.drawMainBar(mainCooldown)
+
+            if (offHandCooldown > 0f) {
+                val x = graphics.scaledWindowWidth / 2 + CONFIG.barX
+                val y =
+                    graphics.scaledWindowHeight / 2 + CONFIG.barY + if (mainCooldown > 0f) CONFIG.doubleLinked.spacing else 0
+                graphics.drawBar(x, y, offHandCooldown)
+            }
         }
-    } else {
-        val cooldown = if (mainCooldown > 0f) mainCooldown else offHandCooldown
-        if (cooldown > 0f) {
-            val x = graphics.scaledWindowWidth / 2 - TemplateClient.X_OFFSET
-            val y = graphics.scaledWindowHeight / 2 - 16
-            graphics.drawBar(x, y, cooldown)
+
+        BarMode.DOUBLE_SPLIT -> {
+            if (mainCooldown > 0f) graphics.drawMainBar(mainCooldown)
+
+            if (offHandCooldown > 0f) {
+                val x = graphics.scaledWindowWidth / 2 + CONFIG.doubleSplit.offHandX
+                val y = graphics.scaledWindowHeight / 2 + CONFIG.doubleSplit.offHandY
+                graphics.drawBar(x, y, offHandCooldown)
+            }
         }
     }
     RenderSystem.defaultBlendFunc()
     RenderSystem.disableBlend()
 }
 
+fun GuiGraphics.drawMainBar(cooldown: Float) {
+    val x = this.scaledWindowWidth / 2 + CONFIG.barX
+    val y = this.scaledWindowHeight / 2 + CONFIG.barY
+    this.drawBar(x, y, cooldown)
+}
+
 fun GuiGraphics.drawBar(x: Int, y: Int, cooldown: Float) {
     val slice = (cooldown * 17.0f).toInt()
     this.drawGuiTexture(COOLDOWN_INDICATOR_BACKGROUND, x, y, 16, 4)
     this.drawGuiTexture(COOLDOWN_INDICATOR_PROGRESS, 16, 4, 0, 0, x, y, slice, 4)
-
 }
