@@ -22,6 +22,10 @@ val curse_id: String? by project
 repositories {
     maven("https://teamvoided.org/releases")
     maven("https://maven.terraformersmc.com/") { name = "Terraformers" }
+    maven("https://api.modrinth.com/maven") {
+        name = "Modrinth"
+        content { includeGroup("maven.modrinth") }
+    }
     mavenCentral()
 }
 
@@ -43,6 +47,11 @@ dependencies {
 
     modCompileOnly("${libs.emi.get()}:api")
     modLocalRuntime(libs.emi)
+
+    modImplementation(libs.fzzy.config)
+
+    val tomlktVersion = "0.3.7"
+    implementation("net.peanuuutz.tomlkt:tomlkt:$tomlktVersion")
 }
 
 loom {
@@ -110,4 +119,7 @@ uploadConfig {
     // Fabric Language Kotlin
     modrinthDependency("Ha28R6CL", uploadConfig.REQUIRED)
     curseDependency("fabric-language-kotlin", uploadConfig.REQUIRED)
+    // Fzzy Config
+    modrinthDependency("hYykXjDp", uploadConfig.REQUIRED)
+    curseDependency("fzzy-config", uploadConfig.REQUIRED)
 }
