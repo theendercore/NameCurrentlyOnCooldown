@@ -1,4 +1,4 @@
-package org.teamvoided.template.data.gen
+package com.theendercore.name_currently_on_cooldown.data.gen
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
@@ -8,7 +8,7 @@ import net.minecraft.registry.RegistrySetBuilder
 object TemplateData : DataGeneratorEntrypoint {
     override fun onInitializeDataGenerator(gen: FabricDataGenerator) {
 //        log.info("Hello from DataGen")
-        val pack = gen.createPack()
+        @Suppress("UNUSED_VARIABLE") val pack = gen.createPack()
 
 //        pack.addProvider(::TemplateWorldGenerator)
     }

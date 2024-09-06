@@ -32,13 +32,8 @@ repositories {
 println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 
 modSettings {
-//    entrypoint("main", "org.teamvoided.template.Template::init")
-    entrypoint("client", "org.teamvoided.template.TemplateClient::init")
-    entrypoint("fabric-datagen", "org.teamvoided.template.data.gen.TemplateData")
-
-    mixinFile("${modId()}.client.mixins.json")
-//    mixinFile("${modId()}.mixins.json")
-//    accessWidener("${modId()}.accesswidener")
+    entrypoint("client", "com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient::initialize")
+//    entrypoint("fabric-datagen", "com.theendercore.name_currently_on_cooldown.data.gen.TemplateData")
 }
 
 dependencies {
@@ -76,6 +71,7 @@ loom {
 }
 
 sourceSets["main"].resources.srcDir("src/main/generated")
+sourceSets["client"].resources.srcDir("src/resources")
 
 tasks {
     val targetJavaVersion = 21
