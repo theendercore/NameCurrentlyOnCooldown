@@ -59,9 +59,10 @@ private fun renderCooldown(graphics: GuiGraphics, deltaTracker: DeltaTracker) {
             if (cooldown > 0f) graphics.drawMainBar(cooldown)
         }
 
+        BarMode.MAINHAND_ONLY -> if (mainCooldown > 0f) graphics.drawMainBar(mainCooldown)
+        BarMode.OFFHAND_ONLY -> if (offHandCooldown > 0f) graphics.drawMainBar(offHandCooldown)
         BarMode.DOUBLE_LINKED -> {
             if (mainCooldown > 0f) graphics.drawMainBar(mainCooldown)
-
             if (offHandCooldown > 0f) {
                 val x = graphics.scaledWindowWidth / 2 + CONFIG.barX
                 val y =
@@ -72,7 +73,6 @@ private fun renderCooldown(graphics: GuiGraphics, deltaTracker: DeltaTracker) {
 
         BarMode.DOUBLE_SPLIT -> {
             if (mainCooldown > 0f) graphics.drawMainBar(mainCooldown)
-
             if (offHandCooldown > 0f) {
                 val x = graphics.scaledWindowWidth / 2 + CONFIG.doubleSplit.offHandX
                 val y = graphics.scaledWindowHeight / 2 + CONFIG.doubleSplit.offHandY

@@ -29,4 +29,4 @@ class CooldownConfig : Config(id("cooldown")) {
 
 }
 
-enum class BarMode { SINGLE, DOUBLE_LINKED, DOUBLE_SPLIT }
+enum class BarMode { SINGLE, MAINHAND_ONLY, OFFHAND_ONLY, DOUBLE_LINKED, DOUBLE_SPLIT }
