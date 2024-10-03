@@ -10,7 +10,7 @@ fabricApiVersion = "0.102.1+1.21.1"
 fabricLangKotlinVersion = "1.12.1+kotlin.2.0.20"
 license = "MIT"
 modules = [ ]
-modDescription = "Simple mod to show held item cooldown on the crosshair"
+modDescription = "Simple mod to show held item cooldown on the crosshair. With many ways to customize the way it looks!"
 # Modmenu badges, values can be: [ library, deprecated ]
 badges = [ ]
 disableKotlin = false
