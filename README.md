@@ -1,4 +1,4 @@
-![Name Currenylu on Cooldown logo](https://cdn.modrinth.com/data/cached_images/e19cf726bded3d3369efe573b9e284950ac5808e.png)
+![Name Currently on Cooldown logo](https://cdn.modrinth.com/data/cached_images/e20cf726bded3d3369efe573b9e284950ac5808e.png)
 
 Simple mod to show held item cooldown on the crosshair. With many ways to customize the way it looks!
 
