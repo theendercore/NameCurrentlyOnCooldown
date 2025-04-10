@@ -100,8 +100,10 @@ publishScript {
 
 uploadConfig {
 //    debugMode = true
-    modrinthId = "id"
-    curseId = "0"
+    modrinthId = "WBFIMxUy"
+//    curseId = "0"
+
+    changeLog = file("changelog.md").readText()
 
     // FabricApi
     modrinthDependency("P7dR8mSH", uploadConfig.REQUIRED)
