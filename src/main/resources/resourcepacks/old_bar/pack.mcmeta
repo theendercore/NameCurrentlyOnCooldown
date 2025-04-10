@@ -1,0 +1,10 @@
+{
+  "pack": {
+    "description": "Original Cooldown Icon",
+    "pack_format": 34,
+    "supported_formats": {
+      "max_inclusive": 200,
+      "min_inclusive": 34
+    }
+  }
+}
