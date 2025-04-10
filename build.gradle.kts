@@ -30,7 +30,7 @@ println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 
 modSettings {
     entrypoint("client", "com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient::initialize")
-//    entrypoint("fabric-datagen", "com.theendercore.name_currently_on_cooldown.data.gen.TemplateData")
+    dependency("fzzy_config", ">=0.6.0+1.21")
 }
 
 dependencies {
@@ -41,9 +41,6 @@ dependencies {
     modLocalRuntime(libs.emi)
 
     modImplementation(libs.fzzy.config)
-
-    val tomlktVersion = "0.3.7"
-    implementation("net.peanuuutz.tomlkt:tomlkt:$tomlktVersion")
 }
 
 loom {
