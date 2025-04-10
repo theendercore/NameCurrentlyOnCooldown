@@ -1,8 +1,9 @@
 package com.theendercore.name_currently_on_cooldown
 
-import me.fzzyhmstrs.fzzy_config.annotations.Comment
 import com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient.MODIFICATION_IDENTIFIER
 import com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient.identifier
+import me.fzzyhmstrs.fzzy_config.annotations.Comment
+import me.fzzyhmstrs.fzzy_config.config.ConfigGroup
 
 
 class NameCurrentlyOnCooldownConfiguration : Configuration(identifier(MODIFICATION_IDENTIFIER)) {
@@ -16,22 +17,22 @@ class NameCurrentlyOnCooldownConfiguration : Configuration(identifier(MODIFICATI
     var indicatorXOffset = -8
 
     @Comment("Vertical Offset for the cooldown indicator")
-    var indicatorYOffset = -12
+    var indicatorYOffset = -11
 
+    @Suppress("unused")
     @Comment("Only important if display type is TOW_LINKED_INDICATORS")
-    var linkedIndicatorConfiguration = TowLinkedIndicatorConfiguration()
+    var linkedIndicator = ConfigGroup("linkedIndicator", false)
 
-    class TowLinkedIndicatorConfiguration : ConfigurationSection() {
-        var verticalOffsetBetweenIndicators = -3
-    }
+    @ConfigGroup.Pop
+    var verticalOffsetBetweenIndicators = -2
 
+    @Suppress("unused")
     @Comment("Only offhand bar config, main hand uses base values")
-    var separateIndicatorConfiguration = TowSeparateIndicatorConfiguration()
+    var separateIndicator = ConfigGroup("separateIndicator", true)
+    var offHandIndicatorXOffset = -8
 
-    class TowSeparateIndicatorConfiguration : ConfigurationSection() {
-        var offHandIndicatorXOffset = -8
-        var offHandIndicatorYOffset = -15
-    }
+    @ConfigGroup.Pop
+    var offHandIndicatorYOffset = -13
 
     enum class CooldownIndicatorDisplayType {
         TOW_LINKED_INDICATORS,

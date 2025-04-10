@@ -35,7 +35,7 @@ fun renderCooldownIndicator(graphicalUserInterfaceGraphics: GraphicalUserInterfa
             if (mainHandItemCooldown > 0.0f) graphicalUserInterfaceGraphics.drawPrimaryIndicator(mainHandItemCooldown)
             if (offHandItemCooldown > 0.0f) {
                 val xCoordinate = graphicalUserInterfaceGraphics.scaledWindowWidth / 2 + CONFIGURATION.indicatorXOffset
-                val yCoordinate = graphicalUserInterfaceGraphics.scaledWindowHeight / 2 + CONFIGURATION.indicatorYOffset + if (mainHandItemCooldown > 0f) CONFIGURATION.linkedIndicatorConfiguration.verticalOffsetBetweenIndicators else 0
+                val yCoordinate = graphicalUserInterfaceGraphics.scaledWindowHeight / 2 + CONFIGURATION.indicatorYOffset + if (mainHandItemCooldown > 0f) CONFIGURATION.verticalOffsetBetweenIndicators else 0
                 graphicalUserInterfaceGraphics.drawIndicator(xCoordinate, yCoordinate, offHandItemCooldown)
             }
         }
@@ -43,8 +43,8 @@ fun renderCooldownIndicator(graphicalUserInterfaceGraphics: GraphicalUserInterfa
         NameCurrentlyOnCooldownConfiguration.CooldownIndicatorDisplayType.TOW_SEPARATE_INDICATORS -> {
             if (mainHandItemCooldown > 0.0f) graphicalUserInterfaceGraphics.drawPrimaryIndicator(mainHandItemCooldown)
             if (offHandItemCooldown > 0.0f) {
-                val xCoordinate = graphicalUserInterfaceGraphics.scaledWindowWidth / 2 + CONFIGURATION.separateIndicatorConfiguration.offHandIndicatorXOffset
-                val yCoordinate = graphicalUserInterfaceGraphics.scaledWindowHeight / 2 + CONFIGURATION.separateIndicatorConfiguration.offHandIndicatorYOffset
+                val xCoordinate = graphicalUserInterfaceGraphics.scaledWindowWidth / 2 + CONFIGURATION.offHandIndicatorXOffset
+                val yCoordinate = graphicalUserInterfaceGraphics.scaledWindowHeight / 2 + CONFIGURATION.offHandIndicatorYOffset
                 graphicalUserInterfaceGraphics.drawIndicator(xCoordinate, yCoordinate, offHandItemCooldown)
             }
         }
