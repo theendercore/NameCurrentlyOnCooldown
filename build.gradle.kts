@@ -19,6 +19,10 @@ repositories {
         name = "Modrinth"
         content { includeGroup("maven.modrinth") }
     }
+    maven {
+        name = "FzzyMaven"
+        url = uri("https://maven.fzzyhmstrs.me/")
+    }
     mavenCentral()
 }
 

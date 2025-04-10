@@ -12,7 +12,7 @@ fzzy-config = "0.6.9+1.21"
 modmenu = { module = "com.terraformersmc:modmenu", version.ref = "modmenu" }
 emi = { module = "dev.emi:emi-fabric", version.ref = "emi" }
 
-fzzy-config = { module = "maven.modrinth:fzzy-config", version.ref = "fzzy-config" }
+fzzy-config = { module = "me.fzzyhmstrs:fzzy_config", version.ref = "fzzy-config" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
