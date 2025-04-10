@@ -30,15 +30,15 @@ println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 
 modSettings {
     entrypoint("client", "com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient::initialize")
-    dependency("fzzy_config", ">=0.6.0+1.21")
+    dependency("fzzy_config", ">=0.6.0+1.21.3")
 }
 
 dependencies {
     modImplementation(fileTree("libs"))
     modImplementation(libs.modmenu)
 
-    modCompileOnly("${libs.emi.get()}:api")
-    modLocalRuntime(libs.emi)
+//    modCompileOnly("${libs.emi.get()}:api")
+//    modLocalRuntime(libs.emi)
 
     modImplementation(libs.fzzy.config)
 }

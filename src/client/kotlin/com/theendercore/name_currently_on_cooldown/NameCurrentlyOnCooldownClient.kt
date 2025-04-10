@@ -1,7 +1,9 @@
 package com.theendercore.name_currently_on_cooldown
 
 import me.fzzyhmstrs.fzzy_config.api.RegisterType
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer
+import net.fabricmc.fabric.api.client.rendering.v1.LayeredDrawerWrapper
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
@@ -11,19 +13,27 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.function.Consumer
 
+
 @Suppress("unused")
 object NameCurrentlyOnCooldownClient {
     const val MODIFICATION_IDENTIFIER = "name_currently_on_cooldown"
-    var CONFIGURATION = ConfigurationApplicationProgrammingInterface.registerAndLoadConfig(::NameCurrentlyOnCooldownConfiguration, RegisterType.CLIENT)
+    var CONFIGURATION = ConfigurationApplicationProgrammingInterface.registerAndLoadConfig(
+        ::NameCurrentlyOnCooldownConfiguration,
+        RegisterType.CLIENT
+    )
 
     @JvmField
     val cataloger: Logger = LoggerFactory.getLogger(NameCurrentlyOnCooldownClient::class.simpleName)
     fun initialize() {
         cataloger.info("Cooling you down!")
-        if (CONFIGURATION.enabledModification) HudRenderCallback.EVENT.register(::renderCooldownIndicator)
+        if (CONFIGURATION.enabledModification) HudLayerRegistrationCallback.EVENT.register(this::renderLayerModifier)
 
         registerBuiltInPack(MODIFICATION_IDENTIFIER, identifier("old_bar"))
     }
+
+    private fun renderLayerModifier(layeredDrawerWrapper: LayeredDrawerWrapper) = layeredDrawerWrapper.attachLayerAfter(
+        IdentifiedLayer.CROSSHAIR, identifier("cooldown_indicator"), ::renderCooldownIndicator
+    )
 
     // TODO: Replace with VoidLib
     private fun registerBuiltInPack(
@@ -32,6 +42,7 @@ object NameCurrentlyOnCooldownClient {
         assert(ResourceManagerHelper.registerBuiltinResourcePack(id, it, packType))
         { "Failed to register built-in pack \"$id\" !" }
     }
+
     private fun useMod(id: String, consumer: Consumer<ModContainer>) =
         FabricLoader.getInstance().getModContainer(id).ifPresent(consumer)
 

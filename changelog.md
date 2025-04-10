@@ -1,4 +1,1 @@
-- updated dependencies required for the mod
-- updated cooldown bar to be thinner
-- added built-in resource pack for the old bar
-- changed config to use groups instead of sections (this was it a lot easier to use)
+-  1.21.4 & 1.21.5 update
