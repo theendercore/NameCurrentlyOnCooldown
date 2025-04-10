@@ -12,13 +12,6 @@ plugins {
     alias(libs.plugins.iridium.upload)
 }
 
-group = property("maven_group")!!
-version = property("mod_version")!!
-base.archivesName.set(modSettings.modId())
-
-val modrinth_id: String? by project
-val curse_id: String? by project
-
 repositories {
     maven("https://teamvoided.org/releases")
     maven("https://maven.terraformersmc.com/") { name = "Terraformers" }
@@ -106,8 +99,8 @@ publishScript {
 
 uploadConfig {
 //    debugMode = true
-    modrinthId = modrinth_id
-    curseId = curse_id
+    modrinthId = "id"
+    curseId = "0"
 
     // FabricApi
     modrinthDependency("P7dR8mSH", uploadConfig.REQUIRED)
