@@ -104,6 +104,7 @@ uploadConfig {
 //    curseId = "0"
 
     changeLog = file("changelog.md").readText()
+    versionOverrides = listOf("1.21.6", "1.21.7")
 
     // FabricApi
     modrinthDependency("P7dR8mSH", uploadConfig.REQUIRED)
