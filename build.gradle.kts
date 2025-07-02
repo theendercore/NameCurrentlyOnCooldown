@@ -101,7 +101,7 @@ publishScript {
 uploadConfig {
 //    debugMode = true
     modrinthId = "WBFIMxUy"
-//    curseId = "0"
+    curseId = "1245298"
 
     changeLog = file("changelog.md").readText()
 
