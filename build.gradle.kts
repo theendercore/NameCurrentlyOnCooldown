@@ -29,7 +29,7 @@ repositories {
 println("Task: " + gradle.startParameter.taskNames.joinToString(","))
 
 modSettings {
-    entrypoint("client", "com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient::initialize")
+    entrypoint("client", "com.theendercore.name_currently_on_cooldown.NCOCClient::initialize")
     dependency("fzzy_config", ">=0.6.0+1.21")
 }
 
