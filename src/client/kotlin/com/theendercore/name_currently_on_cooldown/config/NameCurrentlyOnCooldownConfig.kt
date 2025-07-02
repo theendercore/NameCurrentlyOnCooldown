@@ -1,17 +1,18 @@
-package com.theendercore.name_currently_on_cooldown
+package com.theendercore.name_currently_on_cooldown.config
 
-import com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient.MODIFICATION_IDENTIFIER
-import com.theendercore.name_currently_on_cooldown.NameCurrentlyOnCooldownClient.identifier
+import com.theendercore.name_currently_on_cooldown.NCOCClient.MODID
+import com.theendercore.name_currently_on_cooldown.NCOCClient.id
 import me.fzzyhmstrs.fzzy_config.annotations.Comment
+import me.fzzyhmstrs.fzzy_config.config.Config
 import me.fzzyhmstrs.fzzy_config.config.ConfigGroup
 
 
-class NameCurrentlyOnCooldownConfiguration : Configuration(identifier(MODIFICATION_IDENTIFIER)) {
+class NameCurrentlyOnCooldownConfig : Config(id(MODID)) {
     @Comment("Enables the cooldown indicator")
-    var enabledModification = true
+    var enabledMod = true
 
     @Comment("The way which the cooldown indicator is displayed")
-    var cooldownIndicatorDisplayType = CooldownIndicatorDisplayType.TOW_LINKED_INDICATORS
+    var cooldownIndicatorDisplayType = IndicatorDisplayType.TOW_LINKED_INDICATORS
 
     @Comment("Horizontal Offset for the cooldown indicator")
     var indicatorXOffset = -8
@@ -33,12 +34,4 @@ class NameCurrentlyOnCooldownConfiguration : Configuration(identifier(MODIFICATI
 
     @ConfigGroup.Pop
     var offHandIndicatorYOffset = -13
-
-    enum class CooldownIndicatorDisplayType {
-        TOW_LINKED_INDICATORS,
-        TOW_SEPARATE_INDICATORS,
-        SINGLE_INDICATOR,
-        ONLY_MAINHAND_INDICATOR,
-        ONLY_OFFHAND_INDICATOR
-    }
 }
