@@ -5,13 +5,11 @@ import com.mojang.blaze3d.platform.GlStateManager.SourceFactor
 import com.mojang.blaze3d.systems.RenderSystem
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.fzzy_config.config.Config
-import me.fzzyhmstrs.fzzy_config.config.ConfigSection
 import net.minecraft.client.gui.GuiGraphics
 
 typealias GraphicalUserInterfaceGraphics = GuiGraphics
 typealias ConfigurationApplicationProgrammingInterface = ConfigApi
 typealias Configuration = Config
-typealias ConfigurationSection = ConfigSection
 
 
 @Suppress("FunctionName")

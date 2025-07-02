@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
-import net.minecraft.util.Identifier
+import net.minecraft.resources.ResourceLocation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.function.Consumer
@@ -27,7 +27,7 @@ object NameCurrentlyOnCooldownClient {
 
     // TODO: Replace with VoidLib
     private fun registerBuiltInPack(
-        modId: String, id: Identifier, packType: ResourcePackActivationType = ResourcePackActivationType.NORMAL
+        modId: String, id: ResourceLocation, packType: ResourcePackActivationType = ResourcePackActivationType.NORMAL
     ) = useMod(modId) {
         assert(ResourceManagerHelper.registerBuiltinResourcePack(id, it, packType))
         { "Failed to register built-in pack \"$id\" !" }
@@ -35,5 +35,5 @@ object NameCurrentlyOnCooldownClient {
     private fun useMod(id: String, consumer: Consumer<ModContainer>) =
         FabricLoader.getInstance().getModContainer(id).ifPresent(consumer)
 
-    fun identifier(path: String): Identifier = Identifier.of(MODIFICATION_IDENTIFIER, path)
+    fun identifier(path: String): ResourceLocation = ResourceLocation.fromNamespaceAndPath(MODIFICATION_IDENTIFIER, path)
 }
