@@ -1,14 +1,12 @@
 package com.theendercore.name_currently_on_cooldown
 
-import com.mojang.blaze3d.platform.GlStateManager.DestFactor
-import com.mojang.blaze3d.platform.GlStateManager.SourceFactor
-import com.mojang.blaze3d.systems.RenderSystem
 import com.theendercore.name_currently_on_cooldown.NCOCClient.CONFIG
 import com.theendercore.name_currently_on_cooldown.NCOCClient.id
 import com.theendercore.name_currently_on_cooldown.config.IndicatorDisplayType
 import net.minecraft.client.DeltaTracker
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
+import net.minecraft.client.renderer.RenderPipelines.CROSSHAIR
 import net.minecraft.world.level.GameType
 
 val INDICATOR_BACKGROUND = id("hud/cooldown_indicator_background")
@@ -25,12 +23,8 @@ fun renderCooldownIndicator(gui: GuiGraphics, deltaTracker: DeltaTracker) {
     if (client.gameMode?.playerMode == GameType.SPECTATOR) return
     if (player.offhandItem.isEmpty && player.mainHandItem.isEmpty) return
 
-    val mainCooldown = player.cooldowns.getCooldownPercent(player.mainHandItem.item, 0.0f)
-    val offCooldown = player.cooldowns.getCooldownPercent(player.offhandItem.item, 0.0f)
-    RenderSystem.enableBlend()
-    RenderSystem.blendFuncSeparate(
-        SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO
-    )
+    val mainCooldown = player.cooldowns.getCooldownPercent(player.mainHandItem, 0.0f)
+    val offCooldown = player.cooldowns.getCooldownPercent(player.offhandItem, 0.0f)
     when (CONFIG.cooldownIndicatorDisplayType) {
         IndicatorDisplayType.SINGLE_INDICATOR -> {
             val cooldown = if (mainCooldown > 0f) mainCooldown else offCooldown
@@ -58,8 +52,6 @@ fun renderCooldownIndicator(gui: GuiGraphics, deltaTracker: DeltaTracker) {
             }
         }
     }
-    RenderSystem.defaultBlendFunc()
-    RenderSystem.disableBlend()
 }
 
 fun GuiGraphics.drawPrimaryIndicator(cooldown: Float) {
@@ -69,6 +61,6 @@ fun GuiGraphics.drawPrimaryIndicator(cooldown: Float) {
 }
 
 fun GuiGraphics.drawIndicator(xCoordinate: Int, yCoordinate: Int, cooldown: Float) {
-    this.blitSprite(INDICATOR_BACKGROUND, xCoordinate, yCoordinate, 16, 4)
-    this.blitSprite(INDICATOR, 16, 4, 0, 0, xCoordinate, yCoordinate, (cooldown * 17).toInt(), 4)
+    this.blitSprite(CROSSHAIR, INDICATOR_BACKGROUND, xCoordinate, yCoordinate, 16, 4)
+    this.blitSprite(CROSSHAIR, INDICATOR, 16, 4, 0, 0, xCoordinate, yCoordinate, cooldown.toInt() * 17, 4)
 }
