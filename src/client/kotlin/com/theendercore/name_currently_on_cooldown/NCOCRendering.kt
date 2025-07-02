@@ -62,5 +62,5 @@ fun GuiGraphics.drawPrimaryIndicator(cooldown: Float) {
 
 fun GuiGraphics.drawIndicator(xCoordinate: Int, yCoordinate: Int, cooldown: Float) {
     this.blitSprite(CROSSHAIR, INDICATOR_BACKGROUND, xCoordinate, yCoordinate, 16, 4)
-    this.blitSprite(CROSSHAIR, INDICATOR, 16, 4, 0, 0, xCoordinate, yCoordinate, cooldown.toInt() * 17, 4)
+    this.blitSprite(CROSSHAIR, INDICATOR, 16, 4, 0, 0, xCoordinate, yCoordinate, (cooldown * 17).toInt(), 4)
 }
